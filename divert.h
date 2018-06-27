@@ -24,9 +24,11 @@ typedef struct { /* TODO */ } divert_udp_header_t;
 typedef struct { /* TODO */ } divert_icmp_header_t;
 typedef struct { /* TODO */ } divert_tcp_header_t;
 
+typedef void (*divert_handler_func_t)(divert_type_t type, void* ip, void* protocol, const char* buffer, int length);
+
 int divert_status(int* status);
 
-int divert_open(void (*divert_handler_func)(divert_type_t type, void* ip, void* protocol, const char* buffer, int length));
+int divert_open(divert_handler_func_t handler);
 int divert_close(void);
 
 int divert_filter_add(const char* buffer, int length);
