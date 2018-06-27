@@ -20,6 +20,11 @@
 
 typedef enum
 {
+    DIVERT_ERROR_NONE       = 0
+} divert_error_t;
+
+typedef enum
+{
     DIVERT_TYPE_IPV4_UDP    = 0xA,
     DIVERT_TYPE_IPV4_ICMP   = 0xB,
     DIVERT_TYPE_IPV4_TCP    = 0xC,
@@ -50,19 +55,19 @@ typedef struct { /* TODO */ } divert_tcp_header_t;
 
 typedef void (*divert_handler_func_t)(divert_type_t type, void* ip, void* protocol, const char* buffer, int length);
 
-int divert_status(divert_status_t* status);
+divert_error_t divert_status(divert_status_t* status);
 
-int divert_open(divert_handler_func_t handler);
-int divert_close(void);
+divert_error_t divert_open(divert_handler_func_t handler);
+divert_error_t divert_close(void);
 
-int divert_filter_add(const char* buffer, int length);
-int divert_filter_get(int index, char* buffer, int* length);
-int divert_filter_remove(int index);
-int divert_filter_count(int* count);
-int divert_filter_clear(void);
+divert_error_t divert_filter_add(const char* buffer, int length);
+divert_error_t divert_filter_get(int index, char* buffer, int* length);
+divert_error_t divert_filter_remove(int index);
+divert_error_t divert_filter_count(int* count);
+divert_error_t divert_filter_clear(void);
 
-int divert_start(divert_mode_t mode);
-int divert_inject(divert_type_t type, void* ip, void* protocol, const char* buffer, int length);
-int divert_stop(void);
+divert_error_t divert_start(divert_mode_t mode);
+divert_error_t divert_inject(divert_type_t type, void* ip, void* protocol, const char* buffer, int length);
+divert_error_t divert_stop(void);
 
 #endif // DIVERT_H
