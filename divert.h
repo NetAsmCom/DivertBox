@@ -65,7 +65,7 @@ divert_error_t divert_close(void);
 divert_error_t divert_filter_add(const byte_t* buffer, size_t length);
 divert_error_t divert_filter_get(int index, byte_t* buffer, size_t* length);
 divert_error_t divert_filter_remove(int index);
-divert_error_t divert_filter_count(int* count);
+divert_error_t divert_filter_count(size_t* count);
 divert_error_t divert_filter_clear(void);
 
 divert_error_t divert_start(divert_mode_t mode);
