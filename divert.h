@@ -19,6 +19,7 @@
 #endif
 
 typedef unsigned char byte_t;
+typedef size_t index_t;
 
 typedef enum
 {
@@ -63,8 +64,8 @@ divert_error_t divert_open(divert_handler_func_t handler);
 divert_error_t divert_close(void);
 
 divert_error_t divert_filter_add(const byte_t* buffer, size_t length);
-divert_error_t divert_filter_get(int index, byte_t* buffer, size_t* length);
-divert_error_t divert_filter_remove(int index);
+divert_error_t divert_filter_get(index_t index, byte_t* buffer, size_t* length);
+divert_error_t divert_filter_remove(index_t index);
 divert_error_t divert_filter_count(size_t* count);
 divert_error_t divert_filter_clear(void);
 
