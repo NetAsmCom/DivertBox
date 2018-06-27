@@ -1,6 +1,10 @@
 #ifndef DIVERT_H
 #define DIVERT_H
 
+#define DIVERT_MODE_DIVERT 0
+#define DIVERT_MODE_SNIFF 1
+#define DIVERT_MODE_INFO 2
+
 int divert_status(int* status);
 
 int divert_open(void (*handler_func)(int type, void* ip, void* protocol, const char* buffer, int length));
