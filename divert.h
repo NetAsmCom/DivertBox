@@ -1,9 +1,16 @@
 #ifndef DIVERT_H
 #define DIVERT_H
 
-#define DIVERT_MODE_DIVERT 0
-#define DIVERT_MODE_SNIFF 1
-#define DIVERT_MODE_INFO 2
+#define DIVERT_TYPE_IPV4_UDP    0xA
+#define DIVERT_TYPE_IPV4_ICMP   0xB
+#define DIVERT_TYPE_IPV4_TCP    0xC
+#define DIVERT_TYPE_IPV6_UDP    0xD
+#define DIVERT_TYPE_IPV6_ICMP   0xE
+#define DIVERT_TYPE_IPV6_TCP    0xF
+
+#define DIVERT_MODE_DIVERT      0xA
+#define DIVERT_MODE_SNIFF       0xB
+#define DIVERT_MODE_INFO        0xC
 
 int divert_status(int* status);
 
