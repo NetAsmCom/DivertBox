@@ -26,7 +26,7 @@ typedef struct { /* TODO */ } divert_tcp_header_t;
 
 int divert_status(int* status);
 
-int divert_open(void (*handler_func)(divert_type_t type, void* ip, void* protocol, const char* buffer, int length));
+int divert_open(void (*divert_handler_func)(divert_type_t type, void* ip, void* protocol, const char* buffer, int length));
 int divert_close(void);
 
 int divert_filter_add(const char* buffer, int length);
