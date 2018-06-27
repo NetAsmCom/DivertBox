@@ -18,6 +18,13 @@ typedef enum
     DIVERT_MODE_INFO        = 0xC
 } divert_mode_t;
 
+typedef enum
+{
+    DIVERT_STATUS_IDLE      = 0x0,
+    DIVERT_STATUS_READY     = 0xA,
+    DIVERT_STATUS_ACTIVE    = 0xF
+} divert_status_t;
+
 typedef struct { /* TODO */ } divert_ipv4_header_t;
 typedef struct { /* TODO */ } divert_ipv6_header_t;
 typedef struct { /* TODO */ } divert_udp_header_t;
@@ -26,7 +33,7 @@ typedef struct { /* TODO */ } divert_tcp_header_t;
 
 typedef void (*divert_handler_func_t)(divert_type_t type, void* ip, void* protocol, const char* buffer, int length);
 
-int divert_status(int* status);
+int divert_status(divert_status_t* status);
 
 int divert_open(divert_handler_func_t handler);
 int divert_close(void);
