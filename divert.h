@@ -18,6 +18,8 @@
     #error "libdivert: unsupported platform"
 #endif
 
+typedef unsigned char byte_t;
+
 typedef enum
 {
     DIVERT_ERROR_NONE       = 0
@@ -53,21 +55,21 @@ typedef struct { /* TODO */ } divert_udp_header_t;
 typedef struct { /* TODO */ } divert_icmp_header_t;
 typedef struct { /* TODO */ } divert_tcp_header_t;
 
-typedef void (*divert_handler_func_t)(divert_type_t type, void* ip, void* protocol, const char* buffer, size_t length);
+typedef void (*divert_handler_func_t)(divert_type_t type, void* ip, void* protocol, const byte_t* buffer, size_t length);
 
 divert_error_t divert_status(divert_status_t* status);
 
 divert_error_t divert_open(divert_handler_func_t handler);
 divert_error_t divert_close(void);
 
-divert_error_t divert_filter_add(const char* buffer, size_t length);
-divert_error_t divert_filter_get(int index, char* buffer, size_t* length);
+divert_error_t divert_filter_add(const byte_t* buffer, size_t length);
+divert_error_t divert_filter_get(int index, byte_t* buffer, size_t* length);
 divert_error_t divert_filter_remove(int index);
 divert_error_t divert_filter_count(int* count);
 divert_error_t divert_filter_clear(void);
 
 divert_error_t divert_start(divert_mode_t mode);
-divert_error_t divert_inject(divert_type_t type, void* ip, void* protocol, const char* buffer, size_t length);
+divert_error_t divert_inject(divert_type_t type, void* ip, void* protocol, const byte_t* buffer, size_t length);
 divert_error_t divert_stop(void);
 
 #endif // DIVERT_H
