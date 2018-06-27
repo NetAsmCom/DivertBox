@@ -1,6 +1,23 @@
 #ifndef DIVERT_H
 #define DIVERT_H
 
+#ifdef _WIN32
+    #define DIVERT_PLATFORM_WINDOWS
+#elif __linux__
+    #define DIVERT_PLATFORM_LINUX
+#elif __APPLE__
+    #include "TargetConditionals.h"
+    #if TARGET_OS_MAC
+        #define DIVERT_PLATFORM_MACOS
+    #endif
+#endif
+
+#if !defined(DIVERT_PLATFORM_WINDOWS) &&\
+    !defined(DIVERT_PLATFORM_LINUX) &&\
+    !defined(DIVERT_PLATFORM_MACOS)
+    #error "libdivert: unsupported platform"
+#endif
+
 typedef enum
 {
     DIVERT_TYPE_IPV4_UDP    = 0xA,
