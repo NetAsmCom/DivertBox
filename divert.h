@@ -55,7 +55,12 @@ typedef enum
 typedef struct { /* TODO */ } dv_ipv4_header_t;
 typedef struct { /* TODO */ } dv_ipv6_header_t;
 typedef struct { /* TODO */ } dv_udp_header_t;
-typedef struct { /* TODO */ } dv_icmp_header_t;
+typedef struct
+{
+    uint8_t type;
+    uint8_t code;
+    uint16_t checksum;
+} dv_icmp_header_t;
 typedef struct { /* TODO */ } dv_tcp_header_t;
 
 typedef void (*dv_handler_func_t)(dv_packet_type_t type, const dv_raw_ptr_t ip_header, const dv_raw_ptr_t protocol_header, const uint8_t* buffer, size_t length);
