@@ -52,8 +52,14 @@ typedef enum
     DV_STATUS_ACTIVE    = 0xF
 } dv_status_t;
 
-typedef struct { /* TODO */ } dv_ipv4_header_t;
-typedef struct { /* TODO */ } dv_ipv6_header_t;
+typedef struct
+{
+    // TODO
+} dv_ipv4_header_t;
+typedef struct
+{
+    // TODO
+} dv_ipv6_header_t;
 typedef struct
 {
     uint16_t source_port;
@@ -67,7 +73,27 @@ typedef struct
     uint8_t code;
     uint16_t checksum;
 } dv_icmp_header_t;
-typedef struct { /* TODO */ } dv_tcp_header_t;
+typedef struct
+{
+    uint16_t source_port;
+    uint16_t destination_port;
+    uint32_t sequence_number;
+    uint32_t acknowledgement_number;
+    uint8_t data_offset:4,
+            reserved:4;
+    uint8_t cwr_flag:1,
+            ece_flag:1,
+            urg_flag:1,
+            ack_flag:1,
+            psh_flag:1,
+            rst_flag:1,
+            syn_flag:1,
+            fin_flag:1;
+    uint16_t window_size;
+    uint16_t checksum;
+    uint16_t urgent_pointer;
+    // TODO: options
+} dv_tcp_header_t; // TODO: needs testing
 
 typedef void (*dv_handler_func_t)(dv_packet_type_t type, const dv_raw_ptr_t ip_header, const dv_raw_ptr_t protocol_header, const uint8_t* buffer, size_t length);
 
