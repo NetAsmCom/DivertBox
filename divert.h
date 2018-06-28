@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(WIN32)
     #define DIVERT_PLATFORM_WINDOWS
 #elif __linux__
     #define DIVERT_PLATFORM_LINUX
