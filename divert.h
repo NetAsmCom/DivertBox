@@ -54,7 +54,13 @@ typedef enum
 
 typedef struct { /* TODO */ } dv_ipv4_header_t;
 typedef struct { /* TODO */ } dv_ipv6_header_t;
-typedef struct { /* TODO */ } dv_udp_header_t;
+typedef struct
+{
+    uint16_t source_port;
+    uint16_t destination_port;
+    uint16_t length;
+    uint16_t checksum;
+} dv_udp_header_t;
 typedef struct
 {
     uint8_t type;
