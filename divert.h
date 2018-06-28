@@ -20,7 +20,7 @@
 
 typedef unsigned char dv_byte_t;
 typedef unsigned int dv_size_t;
-typedef void* dv_ptr_t;
+typedef void* dv_raw_ptr_t;
 
 typedef enum
 {
@@ -57,7 +57,7 @@ typedef struct { /* TODO */ } dv_udp_header_t;
 typedef struct { /* TODO */ } dv_icmp_header_t;
 typedef struct { /* TODO */ } dv_tcp_header_t;
 
-typedef void (*dv_handler_func_t)(dv_packet_type_t type, const dv_ptr_t ip_header, const dv_ptr_t protocol_header, const dv_byte_t* buffer, dv_size_t length);
+typedef void (*dv_handler_func_t)(dv_packet_type_t type, const dv_raw_ptr_t ip_header, const dv_raw_ptr_t protocol_header, const dv_byte_t* buffer, dv_size_t length);
 
 dv_error_t divert_status(dv_status_t* status);
 
@@ -71,7 +71,7 @@ dv_error_t divert_filter_count(dv_size_t* count);
 dv_error_t divert_filter_clear(void);
 
 dv_error_t divert_start(dv_capture_mode_t mode);
-dv_error_t divert_inject(dv_packet_type_t type, const dv_ptr_t ip_header, const dv_ptr_t protocol_header, const dv_byte_t* buffer, dv_size_t length);
+dv_error_t divert_inject(dv_packet_type_t type, const dv_raw_ptr_t ip_header, const dv_raw_ptr_t protocol_header, const dv_byte_t* buffer, dv_size_t length);
 dv_error_t divert_stop(void);
 
 #endif // DIVERT_H
