@@ -54,8 +54,27 @@ typedef enum
 
 typedef struct
 {
-    // TODO
-} dv_ipv4_header_t;
+    uint8_t version:4,
+            ihl:4;
+    uint8_t dscp:6,
+            ecn:2;
+    uint16_t total_length;
+    uint16_t identification;
+    uint16_t flags:3,
+             fragment_offset:13;
+    uint8_t time_to_live;
+    uint8_t protocol;
+    uint16_t header_checksum;
+    uint8_t source_address_0;
+    uint8_t source_address_1;
+    uint8_t source_address_2;
+    uint8_t source_address_3;
+    uint8_t destination_address_0;
+    uint8_t destination_address_1;
+    uint8_t destination_address_2;
+    uint8_t destination_address_3;
+    // TODO: options
+} dv_ipv4_header_t; // TODO: needs testing
 typedef struct
 {
     // TODO
