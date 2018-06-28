@@ -1,6 +1,9 @@
 #ifndef DIVERT_H
 #define DIVERT_H
 
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef _WIN32
     #define DIVERT_PLATFORM_WINDOWS
 #elif __linux__
@@ -18,8 +21,6 @@
     #error "libdivert: unsupported platform"
 #endif
 
-typedef unsigned char dv_byte_t;
-typedef unsigned int dv_size_t;
 typedef void* dv_raw_ptr_t;
 
 typedef enum
@@ -57,21 +58,21 @@ typedef struct { /* TODO */ } dv_udp_header_t;
 typedef struct { /* TODO */ } dv_icmp_header_t;
 typedef struct { /* TODO */ } dv_tcp_header_t;
 
-typedef void (*dv_handler_func_t)(dv_packet_type_t type, const dv_raw_ptr_t ip_header, const dv_raw_ptr_t protocol_header, const dv_byte_t* buffer, dv_size_t length);
+typedef void (*dv_handler_func_t)(dv_packet_type_t type, const dv_raw_ptr_t ip_header, const dv_raw_ptr_t protocol_header, const uint8_t* buffer, size_t length);
 
 dv_error_t divert_status(dv_status_t* status);
 
 dv_error_t divert_open(dv_handler_func_t handler);
 dv_error_t divert_close(void);
 
-dv_error_t divert_filter_add(const dv_byte_t* buffer, dv_size_t length);
-dv_error_t divert_filter_get(dv_size_t index, dv_byte_t* buffer, dv_size_t* length);
-dv_error_t divert_filter_remove(dv_size_t index);
-dv_error_t divert_filter_count(dv_size_t* count);
+dv_error_t divert_filter_add(const uint8_t* buffer, size_t length);
+dv_error_t divert_filter_get(size_t index, uint8_t* buffer, size_t* length);
+dv_error_t divert_filter_remove(size_t index);
+dv_error_t divert_filter_count(size_t* count);
 dv_error_t divert_filter_clear(void);
 
 dv_error_t divert_start(dv_capture_mode_t mode);
-dv_error_t divert_inject(dv_packet_type_t type, const dv_raw_ptr_t ip_header, const dv_raw_ptr_t protocol_header, const dv_byte_t* buffer, dv_size_t length);
+dv_error_t divert_inject(dv_packet_type_t type, const dv_raw_ptr_t ip_header, const dv_raw_ptr_t protocol_header, const uint8_t* buffer, size_t length);
 dv_error_t divert_stop(void);
 
 #endif // DIVERT_H
