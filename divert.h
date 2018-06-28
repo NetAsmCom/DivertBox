@@ -18,60 +18,60 @@
     #error "libdivert: unsupported platform"
 #endif
 
-typedef unsigned char byte_t;
-typedef unsigned int size_t;
-typedef void* raw_ptr_t;
+typedef unsigned char dv_byte_t;
+typedef unsigned int dv_size_t;
+typedef void* dv_ptr_t;
 
 typedef enum
 {
-    DIVERT_ERROR_NONE       = 0
-} divert_error_t;
+    DV_ERROR_NONE       = 0
+} dv_error_t;
 
 typedef enum
 {
-    DIVERT_TYPE_IPV4_UDP    = 0xA,
-    DIVERT_TYPE_IPV4_ICMP   = 0xB,
-    DIVERT_TYPE_IPV4_TCP    = 0xC,
-    DIVERT_TYPE_IPV6_UDP    = 0xD,
-    DIVERT_TYPE_IPV6_ICMP   = 0xE,
-    DIVERT_TYPE_IPV6_TCP    = 0xF
-} divert_type_t;
+    DV_TYPE_IPV4_UDP    = 0xA,
+    DV_TYPE_IPV4_ICMP   = 0xB,
+    DV_TYPE_IPV4_TCP    = 0xC,
+    DV_TYPE_IPV6_UDP    = 0xD,
+    DV_TYPE_IPV6_ICMP   = 0xE,
+    DV_TYPE_IPV6_TCP    = 0xF
+} dv_packet_type_t;
 
 typedef enum
 {
-    DIVERT_MODE_DIVERT      = 0xA,
-    DIVERT_MODE_SNIFF       = 0xB,
-    DIVERT_MODE_INFO        = 0xC
-} divert_mode_t;
+    DV_MODE_DIVERT      = 0xA,
+    DV_MODE_SNIFF       = 0xB,
+    DV_MODE_INFO        = 0xC
+} dv_capture_mode_t;
 
 typedef enum
 {
-    DIVERT_STATUS_IDLE      = 0x0,
-    DIVERT_STATUS_READY     = 0xA,
-    DIVERT_STATUS_ACTIVE    = 0xF
-} divert_status_t;
+    DV_STATUS_IDLE      = 0x0,
+    DV_STATUS_READY     = 0xA,
+    DV_STATUS_ACTIVE    = 0xF
+} dv_status_t;
 
-typedef struct { /* TODO */ } divert_ipv4_header_t;
-typedef struct { /* TODO */ } divert_ipv6_header_t;
-typedef struct { /* TODO */ } divert_udp_header_t;
-typedef struct { /* TODO */ } divert_icmp_header_t;
-typedef struct { /* TODO */ } divert_tcp_header_t;
+typedef struct { /* TODO */ } dv_ipv4_header_t;
+typedef struct { /* TODO */ } dv_ipv6_header_t;
+typedef struct { /* TODO */ } dv_udp_header_t;
+typedef struct { /* TODO */ } dv_icmp_header_t;
+typedef struct { /* TODO */ } dv_tcp_header_t;
 
-typedef void (*divert_handler_func_t)(divert_type_t type, const raw_ptr_t ip_header, const raw_ptr_t protocol_header, const byte_t* buffer, size_t length);
+typedef void (*dv_handler_func_t)(dv_packet_type_t type, const dv_ptr_t ip_header, const dv_ptr_t protocol_header, const dv_byte_t* buffer, dv_size_t length);
 
-divert_error_t divert_status(divert_status_t* status);
+dv_error_t divert_status(dv_status_t* status);
 
-divert_error_t divert_open(divert_handler_func_t handler);
-divert_error_t divert_close(void);
+dv_error_t divert_open(dv_handler_func_t handler);
+dv_error_t divert_close(void);
 
-divert_error_t divert_filter_add(const byte_t* buffer, size_t length);
-divert_error_t divert_filter_get(size_t index, byte_t* buffer, size_t* length);
-divert_error_t divert_filter_remove(size_t index);
-divert_error_t divert_filter_count(size_t* count);
-divert_error_t divert_filter_clear(void);
+dv_error_t divert_filter_add(const dv_byte_t* buffer, dv_size_t length);
+dv_error_t divert_filter_get(dv_size_t index, dv_byte_t* buffer, dv_size_t* length);
+dv_error_t divert_filter_remove(dv_size_t index);
+dv_error_t divert_filter_count(dv_size_t* count);
+dv_error_t divert_filter_clear(void);
 
-divert_error_t divert_start(divert_mode_t mode);
-divert_error_t divert_inject(divert_type_t type, const raw_ptr_t ip_header, const raw_ptr_t protocol_header, const byte_t* buffer, size_t length);
-divert_error_t divert_stop(void);
+dv_error_t divert_start(dv_capture_mode_t mode);
+dv_error_t divert_inject(dv_packet_type_t type, const dv_ptr_t ip_header, const dv_ptr_t protocol_header, const dv_byte_t* buffer, dv_size_t length);
+dv_error_t divert_stop(void);
 
 #endif // DIVERT_H
