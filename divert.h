@@ -77,8 +77,29 @@ typedef struct
 } dv_ipv4_header_t; // TODO: needs testing
 typedef struct
 {
-    // TODO
-} dv_ipv6_header_t;
+    uint32_t version:4,
+             traffic_class:8,
+             flow_label:20;
+    uint16_t payload_length;
+    uint8_t next_header;
+    uint8_t hop_limit;
+    uint16_t source_address_0;
+    uint16_t source_address_1;
+    uint16_t source_address_2;
+    uint16_t source_address_3;
+    uint16_t source_address_4;
+    uint16_t source_address_5;
+    uint16_t source_address_6;
+    uint16_t source_address_7;
+    uint16_t destination_address_0;
+    uint16_t destination_address_1;
+    uint16_t destination_address_2;
+    uint16_t destination_address_3;
+    uint16_t destination_address_4;
+    uint16_t destination_address_5;
+    uint16_t destination_address_6;
+    uint16_t destination_address_7;
+} dv_ipv6_header_t; // TODO: needs testing
 typedef struct
 {
     uint16_t source_port;
