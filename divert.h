@@ -21,22 +21,12 @@
     #error "libdivert: unsupported platform"
 #endif
 
-typedef void* dv_raw_ptr_t;
+// TODO:WIP: Filter Language Syntax
 
 typedef enum
 {
     DV_ERROR_NONE       = 0
 } dv_error_t;
-
-typedef enum
-{
-    DV_TYPE_IPV4_UDP    = 0xA,
-    DV_TYPE_IPV4_ICMP   = 0xB,
-    DV_TYPE_IPV4_TCP    = 0xC,
-    DV_TYPE_IPV6_UDP    = 0xD,
-    DV_TYPE_IPV6_ICMP   = 0xE,
-    DV_TYPE_IPV6_TCP    = 0xF
-} dv_type_t;
 
 typedef enum
 {
@@ -52,7 +42,7 @@ typedef enum
     DV_STATUS_ACTIVE    = 0xF
 } dv_status_t;
 
-typedef void (*dv_handler_t)(dv_type_t type, const uint8_t* buffer, size_t length);
+typedef void (*dv_handler_t)(size_t filter_index, const uint8_t* buffer, size_t length);
 
 dv_error_t divert_status(dv_status_t* status);
 
@@ -66,7 +56,7 @@ dv_error_t divert_filter_count(size_t* count);
 dv_error_t divert_filter_clear(void);
 
 dv_error_t divert_start(dv_mode_t mode);
-dv_error_t divert_inject(dv_type_t type, const uint8_t* buffer, size_t length);
+dv_error_t divert_inject(const uint8_t* buffer, size_t length);
 dv_error_t divert_stop(void);
 
 #endif // DIVERT_H
