@@ -5,13 +5,13 @@
 #include <stdint.h>
 
 #if defined(_WIN32) || defined(WIN32)
-    #define DIVERT_PLATFORM_WINDOWS
+    #define DIVERT_PLATFORM_WINDOWS 1
 #elif __linux__
-    #define DIVERT_PLATFORM_LINUX
+    #define DIVERT_PLATFORM_LINUX 1
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_MAC
-        #define DIVERT_PLATFORM_MACOS
+        #define DIVERT_PLATFORM_MACOS 1
     #endif
 #endif
 
