@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.6)
 project(example)
+
 include_directories(../../)
+link_directories(../library/)
+
 add_executable(example example.c)
+target_link_libraries(example divert)
