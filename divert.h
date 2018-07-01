@@ -21,7 +21,46 @@
     #error "libdivert: unsupported platform"
 #endif
 
-// TODO:WIP: Filter Language Syntax
+/*
+ * ==== FILTER LANGUAGE SYNTAX ====
+ * (Still very early at the stage, under development)
+ * 
+ *  [] Filter
+ *      | (binary operator)
+ *      & (binary operator)
+ *      ! (unary operator)
+ * 
+ *  : Type
+ *      inbound
+ *      outbound
+ *      ip4
+ *      ip6
+ *      udp
+ *      icmp
+ *      tcp
+ * 
+ *  {} Condition
+ *      = (binary operator)
+ *      > (binary operator)
+ *      < (binary operator)
+ *      ! (unary operator)
+ * 
+ *  () Group
+ *      filter
+ *      condition
+ * 
+ *  Examples
+ * 
+ *  Capture outgoing DNS traffic
+ *  [outbound] & ([tcp: { port = 53 }] | [udp: { port = 53 }])
+ * 
+ *  Capture incoming HTTP/HTTPS traffic
+ *  [inbound] & [ip4] & [tcp: { port = 80 } | { port = 443}]
+ * 
+ *  Capture incoming not-injected loopback traffic
+ *  [inbound: { trait != inject } & { trait = loopback }]
+ * 
+ */
 
 typedef enum
 {
