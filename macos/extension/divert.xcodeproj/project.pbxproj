@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B978C5CC20E9126D004B7D24 /* divert.h in Headers */ = {isa = PBXBuildFile; fileRef = B978C5CB20E9126D004B7D24 /* divert.h */; };
 		B9BFA4A520E907C7006841B3 /* divert.c in Sources */ = {isa = PBXBuildFile; fileRef = B9BFA4A420E907C7006841B3 /* divert.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B978C5CB20E9126D004B7D24 /* divert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = divert.h; sourceTree = "<group>"; };
 		B9BFA4A120E907C7006841B3 /* divert.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = divert.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9BFA4A420E907C7006841B3 /* divert.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = divert.c; sourceTree = "<group>"; };
 		B9BFA4A620E907C7006841B3 /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
@@ -30,6 +32,7 @@
 		B9BFA49720E907C7006841B3 = {
 			isa = PBXGroup;
 			children = (
+				B978C5CB20E9126D004B7D24 /* divert.h */,
 				B9BFA4A620E907C7006841B3 /* info.plist */,
 				B9BFA4A420E907C7006841B3 /* divert.c */,
 				B9BFA4A220E907C7006841B3 /* Products */,
@@ -51,6 +54,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B978C5CC20E9126D004B7D24 /* divert.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
