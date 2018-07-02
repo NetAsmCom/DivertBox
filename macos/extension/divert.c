@@ -1,7 +1,5 @@
 #include "divert.h"
 
-#include <sys/systm.h>
-#include <stdint.h>
 #include <stdarg.h>
 
 #define FUNCTION "divert_start"
