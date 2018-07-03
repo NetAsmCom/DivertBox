@@ -6,7 +6,7 @@
 kern_return_t divert_start(kmod_info_t* ki, void* d)
 {
     LOG("call");
-    return KERN_SUCCESS;
+    return control_register();
 }
 #undef FUNCTION
 
@@ -14,7 +14,7 @@ kern_return_t divert_start(kmod_info_t* ki, void* d)
 kern_return_t divert_stop(kmod_info_t* ki, void* d)
 {
     LOG("call");
-    return KERN_SUCCESS;
+    return control_deregister();
 }
 #undef FUNCTION
 
