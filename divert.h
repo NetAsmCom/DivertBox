@@ -81,21 +81,20 @@ typedef enum
     DV_STATUS_ACTIVE    = 0xF
 } dv_status_t;
 
-typedef void (*dv_handler_t)(size_t filter_index, const uint8_t* buffer, size_t length);
-
 dv_error_t divert_status(dv_status_t* status);
 
-dv_error_t divert_open(dv_handler_t handler);
+dv_error_t divert_open(void);
 dv_error_t divert_close(void);
 
-dv_error_t divert_filter_add(const uint8_t* buffer, size_t length);
-dv_error_t divert_filter_get(size_t index, uint8_t* buffer, size_t* length);
+dv_error_t divert_filter_add(const uint8_t* buffer, size_t buffer_length);
+dv_error_t divert_filter_get(size_t index, uint8_t* buffer, size_t buffer_length, size_t* output_length);
 dv_error_t divert_filter_remove(size_t index);
 dv_error_t divert_filter_count(size_t* count);
 dv_error_t divert_filter_clear(void);
 
 dv_error_t divert_start(dv_mode_t mode);
-dv_error_t divert_inject(const uint8_t* buffer, size_t length);
+dv_error_t divert_capture(size_t* filter_index, uint8_t* buffer, size_t buffer_length, size_t* output_length);
+dv_error_t divert_inject(const uint8_t* buffer, size_t buffer_length);
 dv_error_t divert_stop(void);
 
 #endif // DIVERT_H
