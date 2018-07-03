@@ -13,6 +13,9 @@ kern_return_t divert_stop(kmod_info_t* ki, void* d);
 kern_return_t control_register(void);
 kern_return_t control_deregister(void);
 
+kern_return_t ipfilter_add(void);
+kern_return_t ipfilter_remove(void);
+
 void _log(const char* function, const char* text);
 void _logf(const char* function, const char* format, ...);
 
