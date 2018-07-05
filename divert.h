@@ -81,7 +81,7 @@ typedef enum
     DV_STATUS_ACTIVE    = 0xF
 } dv_status_t;
 
-dv_error_t divert_status(dv_status_t* status);
+dv_status_t divert_status(void);
 
 dv_error_t divert_open(void);
 dv_error_t divert_close(void);
