@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(divert)
+
 include_directories(../../)
-add_library(divert STATIC divert.c)
+include_directories(/System/Library/Frameworks/IOKit.framework/Headers)
+
+add_library(divert STATIC divert.c library.c)
