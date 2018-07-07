@@ -5,6 +5,7 @@
 #define kBUNDLE_MD5 "DBA0BB4EA08DD00AD771E99E807B2A86"
 
 int library_directory_exists(const char* path);
+int library_superuser_access(void);
 int library_chown_directory(const char* path, const char* user, const char* group);
 
 #endif // LIBRARY_H

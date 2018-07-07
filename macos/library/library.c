@@ -12,6 +12,11 @@ int library_directory_exists(const char* path)
     return stat(path, &s) || !S_ISDIR(s.st_mode);
 }
 
+int library_superuser_access()
+{
+    return geteuid();
+}
+
 uid_t _library_chown_user_id = 0;
 gid_t _library_chown_group_id = 0;
 
