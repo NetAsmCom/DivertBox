@@ -1,9 +1,16 @@
 #include "library.h"
 
+#include <sys/stat.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
 #include <ftw.h>
+
+int library_directory_exists(const char* path)
+{
+    struct stat s;
+    return stat(path, &s) || !S_ISDIR(s.st_mode);
+}
 
 uid_t _library_chown_user_id = 0;
 gid_t _library_chown_group_id = 0;
