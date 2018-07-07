@@ -7,6 +7,7 @@
 int library_directory_exists(const char* path);
 int library_superuser_access(void);
 int library_md5sum_directory(const char* path, unsigned char* checksum);
+int library_string_to_hexstring(const char* string, int string_length, char* hexstring, int hexstring_length);
 int library_chown_directory(const char* path, const char* user, const char* group);
 
 #endif // LIBRARY_H

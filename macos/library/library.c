@@ -70,6 +70,28 @@ int library_md5sum_directory(const char* path, unsigned char* checksum)
         CC_MD5_Final(checksum, &_library_md5_context) != 1;
 }
 
+// -------- string to hexstring
+
+int library_string_to_hexstring(const char* string, int string_length, char* hexstring, int hexstring_length)
+{
+    if (string_length * 2 != hexstring_length)
+    {
+        return 1;
+    }
+
+    for (int index = 0; index < string_length; ++index)
+    {
+        if (snprintf(hexstring, hexstring_length, "%02X", string[index]) < 0)
+        {
+            return -1;
+        }
+
+        hexstring += 2;
+    }
+
+    return 0;
+}
+
 // -------- chown directory
 
 uid_t _library_chown_user_id = 0;
