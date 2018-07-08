@@ -12,5 +12,6 @@ int library_string_to_hexstring(const char* string, int string_length, char* hex
 int library_chown_directory(const char* path, const char* user, const char* group);
 int library_kext_load_with_directory(const char* path);
 int library_kext_loaded_and_valid(const char* id, const char* path);
+int library_kext_unload_with_id(const char* id);
 
 #endif // LIBRARY_H

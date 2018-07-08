@@ -191,3 +191,13 @@ int library_kext_loaded_and_valid(const char* id, const char* path)
 
     return context.result;
 }
+
+// -------- kext unload with id
+
+int library_kext_unload_with_id(const char* id)
+{
+    CFStringRef bundle_id_string = CFStringCreateWithCString(kCFAllocatorDefault, id, kCFStringEncodingUTF8);
+    if (bundle_id_string == NULL) { return -1; }
+
+    return KextManagerUnloadKextWithIdentifier(bundle_id_string) != kOSReturnSuccess;
+}
