@@ -1,6 +1,7 @@
 #include "library.h"
 
 #include <CommonCrypto/CommonDigest.h>
+#include <kext/KextManager.h>
 #include <string.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -124,4 +125,14 @@ int library_chown_directory(const char* path, const char* user, const char* grou
     }
 
     return nftw(path, &_library_chown_ftw_handle, 4, FTW_PHYS | FTW_DEPTH);
+}
+
+// -------- kext load with directory
+
+int library_kext_load_with_directory(const char* path)
+{
+    CFStringRef path_string = CFStringCreateWithCString(kCFAllocatorDefault, path, kCFStringEncodingUTF8);
+    CFURLRef path_url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path_string, kCFURLPOSIXPathStyle, true);
+
+    return KextManagerLoadKextWithURL(path_url, NULL) != kOSReturnSuccess;
 }
