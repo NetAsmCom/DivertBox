@@ -164,9 +164,15 @@ void _library_kext_check_enumerate(const void* key, const void* value, void* con
     const char* bundle_path_cstring = CFStringGetCStringPtr(CFDictionaryGetValue(value, CFStringCreateWithCString(kCFAllocatorDefault, "OSBundlePath", kCFStringEncodingUTF8)), kCFStringEncodingUTF8);
     if (bundle_path_cstring == NULL) { return; }
 
-    check_context->result =
-        strncmp(bundle_id_cstring, check_context->id, check_context->id_length) ||
-        strncmp(bundle_path_cstring, check_context->path, check_context->path_length);
+    if (strncmp(bundle_id_cstring, check_context->id, check_context->id_length) == 0)
+    {
+        check_context->result = strncmp(bundle_path_cstring, check_context->path, check_context->path_length) != 0;
+    }
+
+    if (strncmp(bundle_path_cstring, check_context->path, check_context->path_length) == 0)
+    {
+        check_context->result = strncmp(bundle_id_cstring, check_context->id, check_context->id_length) != 0;
+    }
 }
 
 int library_kext_loaded_and_valid(const char* id, const char* path)
