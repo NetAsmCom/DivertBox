@@ -64,7 +64,22 @@
 
 typedef enum
 {
-    DV_ERROR_NONE       = 0
+    DV_ERROR_NONE                               = 0,
+    DV_ERROR_UNKNOWN                            = 1,
+    DV_ERROR_SUPERUSER_REQUIRED                 = 2,
+#ifdef DIVERT_PLATFORM_MACOS
+    DV_ERROR_KERNEL_EXTENSION_CHECKSUM_FAILED   = 3,
+    DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION    = 4,
+    DV_ERROR_FAILED_TO_UNLOAD_KERNEL_EXTENSION  = 5,
+#elif DIVERT_PLATFORM_LINUX
+    DV_ERROR_KERNEL_MODULE_CHECKSUM_FAILED      = 3,
+    DV_ERROR_FAILED_TO_LOAD_KERNEL_MODULE       = 4,
+    DV_ERROR_FAILED_TO_UNLOAD_KERNEL_MODULE     = 5,
+#elif DIVERT_PLATFORM_WINDOWS
+    DV_ERROR_KERNEL_DRIVER_CHECKSUM_FAILED      = 3,
+    DV_ERROR_FAILED_TO_INSTALL_KERNEL_DRIVER    = 4,
+    DV_ERROR_FAILED_TO_UNINSTALL_KERNEL_DRIVER  = 5,
+#endif
 } dv_error_t;
 
 typedef enum
@@ -77,12 +92,12 @@ typedef enum
 typedef enum
 {
     DV_STATUS_IDLE      = 0x0,
+    DV_STATUS_LIMBO     = 0x6,
     DV_STATUS_READY     = 0xA,
     DV_STATUS_ACTIVE    = 0xF
 } dv_status_t;
 
 dv_status_t divert_status(void);
-
 dv_error_t divert_open(void);
 dv_error_t divert_close(void);
 
