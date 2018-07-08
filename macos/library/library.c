@@ -151,7 +151,7 @@ typedef struct
     size_t path_length;
 } _library_kext_check_context_t;
 
-void _library_kext_info_enumerate(const void* key, const void* value, void* context)
+void _library_kext_check_enumerate(const void* key, const void* value, void* context)
 {
     if (key == NULL || value == NULL || context == NULL) { return; }
 
@@ -187,7 +187,7 @@ int library_kext_loaded_and_valid(const char* id, const char* path)
     context.path = actualpath;
     context.path_length = strlen(actualpath);
 
-    CFDictionaryApplyFunction(loaded_kexts, _library_kext_info_enumerate, &context);
+    CFDictionaryApplyFunction(loaded_kexts, _library_kext_check_enumerate, &context);
 
     return context.result;
 }
@@ -200,4 +200,52 @@ int library_kext_unload_with_id(const char* id)
     if (bundle_id_string == NULL) { return -1; }
 
     return KextManagerUnloadKextWithIdentifier(bundle_id_string) != kOSReturnSuccess;
+}
+
+// -------- kext unload with directory
+
+typedef struct
+{
+    int result;
+    const char* path;
+    size_t path_length;
+} _library_kext_unload_context_t;
+
+void _library_kext_unload_enumerate(const void* key, const void* value, void* context)
+{
+    if (key == NULL || value == NULL || context == NULL) { return; }
+
+    _library_kext_unload_context_t* unload_context = context;
+    if (unload_context->result != -1) { return; }
+
+    const char* bundle_id_cstring = CFStringGetCStringPtr(key, kCFStringEncodingUTF8);
+    if (bundle_id_cstring == NULL) { return; }
+
+    const char* bundle_path_cstring = CFStringGetCStringPtr(CFDictionaryGetValue(value, CFStringCreateWithCString(kCFAllocatorDefault, "OSBundlePath", kCFStringEncodingUTF8)), kCFStringEncodingUTF8);
+    if (bundle_path_cstring == NULL) { return; }
+
+    if (strncmp(bundle_path_cstring, unload_context->path, unload_context->path_length) == 0)
+    {
+        unload_context->result = library_kext_unload_with_id(bundle_id_cstring);
+    }
+}
+
+int library_kext_unload_with_directory(const char* path)
+{
+    CFDictionaryRef loaded_kexts = KextManagerCopyLoadedKextInfo(NULL, NULL);
+    if (loaded_kexts == NULL) { return -1; }
+
+    _library_kext_unload_context_t context;
+
+    context.result = -1;
+
+    char actualpath[PATH_MAX];
+    bzero(actualpath, PATH_MAX);
+    if (realpath(path, actualpath) == NULL) { return -1; }
+    context.path = actualpath;
+    context.path_length = strlen(actualpath);
+
+    CFDictionaryApplyFunction(loaded_kexts, _library_kext_unload_enumerate, &context);
+
+    return context.result;
 }

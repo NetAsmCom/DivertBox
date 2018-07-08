@@ -13,5 +13,6 @@ int library_chown_directory(const char* path, const char* user, const char* grou
 int library_kext_load_with_directory(const char* path);
 int library_kext_loaded_and_valid(const char* id, const char* path);
 int library_kext_unload_with_id(const char* id);
+int library_kext_unload_with_directory(const char* path);
 
 #endif // LIBRARY_H
