@@ -29,7 +29,7 @@ int library_superuser_access()
 
 CC_MD5_CTX _library_md5_context;
 
-int _library_md5sum_ftw_handle(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf)
+int _library_md5sum_ftw_handle(const char* fpath, const struct stat* sb, int typeflag, struct FTW* ftwbuf)
 {
     if (S_ISDIR(sb->st_mode))
     {
@@ -98,7 +98,7 @@ int library_string_to_hexstring(const char* string, int string_length, char* hex
 uid_t _library_chown_user_id = 0;
 gid_t _library_chown_group_id = 0;
 
-int _library_chown_ftw_handle(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf)
+int _library_chown_ftw_handle(const char* fpath, const struct stat* sb, int typeflag, struct FTW* ftwbuf)
 {
     if (S_ISDIR(sb->st_mode) || S_ISREG(sb->st_mode))
     {
@@ -132,7 +132,62 @@ int library_chown_directory(const char* path, const char* user, const char* grou
 int library_kext_load_with_directory(const char* path)
 {
     CFStringRef path_string = CFStringCreateWithCString(kCFAllocatorDefault, path, kCFStringEncodingUTF8);
+    if (path_string == NULL) { return -1; }
+
     CFURLRef path_url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path_string, kCFURLPOSIXPathStyle, true);
+    if (path_url == NULL) { return -1; }
 
     return KextManagerLoadKextWithURL(path_url, NULL) != kOSReturnSuccess;
+}
+
+// -------- kext loaded and valid
+
+typedef struct
+{
+    int result;
+    const char* id;
+    size_t id_length;
+    const char* path;
+    size_t path_length;
+} _library_kext_check_context_t;
+
+void _library_kext_info_enumerate(const void* key, const void* value, void* context)
+{
+    if (key == NULL || value == NULL || context == NULL) { return; }
+
+    _library_kext_check_context_t* check_context = context;
+    if (check_context->result != -1) { return; }
+
+    const char* bundle_id_cstring = CFStringGetCStringPtr(key, kCFStringEncodingUTF8);
+    if (bundle_id_cstring == NULL) { return; }
+
+    const char* bundle_path_cstring = CFStringGetCStringPtr(CFDictionaryGetValue(value, CFStringCreateWithCString(kCFAllocatorDefault, "OSBundlePath", kCFStringEncodingUTF8)), kCFStringEncodingUTF8);
+    if (bundle_path_cstring == NULL) { return; }
+
+    check_context->result =
+        strncmp(bundle_id_cstring, check_context->id, check_context->id_length) ||
+        strncmp(bundle_path_cstring, check_context->path, check_context->path_length);
+}
+
+int library_kext_loaded_and_valid(const char* id, const char* path)
+{
+    CFDictionaryRef loaded_kexts = KextManagerCopyLoadedKextInfo(NULL, NULL);
+    if (loaded_kexts == NULL) { return -1; }
+
+    _library_kext_check_context_t context;
+
+    context.result = -1;
+
+    context.id = id;
+    context.id_length = strlen(id);
+
+    char actualpath[PATH_MAX];
+    bzero(actualpath, PATH_MAX);
+    if (realpath(path, actualpath) == NULL) { return -1; }
+    context.path = actualpath;
+    context.path_length = strlen(actualpath);
+
+    CFDictionaryApplyFunction(loaded_kexts, _library_kext_info_enumerate, &context);
+
+    return context.result;
 }
