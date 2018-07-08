@@ -20,21 +20,22 @@ dv_error_t divert_open()
         return DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION;
     }
 
+    /*
+
+    ! DISABLED FOR DEVELOPMENT PURPOSES
+    ! MUST BE ENABLED ON RELEASE BUILDS
+
     char directory_md5sum[16];
     if (library_md5sum_directory(kBUNDLE_DIR, directory_md5sum))
     {
         return DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION;
     }
 
-    /*
-
-    ! DISABLED FOR DEVELOPMENT PURPOSES
-    ! MUST BE ENABLED ON RELEASE BUILDS
-
     if (strncmp(directory_md5sum, kBUNDLE_MD5, 16))
     {
         return DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION + 2000;
     }
+
     */
 
     if (library_chown_directory(kBUNDLE_DIR, "root", "wheel"))
