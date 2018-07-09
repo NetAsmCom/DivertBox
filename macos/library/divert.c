@@ -17,7 +17,7 @@ dv_error_t divert_open()
 
     if (library_directory_exists(kBUNDLE_DIR))
     {
-        return DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION;
+        return DV_ERROR_KERNEL_SERVICE_LOAD_FAILED;
     }
 
     /*
@@ -28,24 +28,24 @@ dv_error_t divert_open()
     char directory_md5sum[16];
     if (library_md5sum_directory(kBUNDLE_DIR, directory_md5sum))
     {
-        return DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION;
+        return DV_ERROR_KERNEL_SERVICE_CHECKSUM_FAILED;
     }
 
     if (strncmp(directory_md5sum, kBUNDLE_MD5, 16))
     {
-        return DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION + 2000;
+        return DV_ERROR_KERNEL_SERVICE_CHECKSUM_FAILED;
     }
 
     */
 
     if (library_chown_directory(kBUNDLE_DIR, "root", "wheel"))
     {
-        return DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION;
+        return DV_ERROR_KERNEL_SERVICE_LOAD_FAILED;
     }
 
     if (library_kext_load_with_directory(kBUNDLE_DIR))
     {
-        return DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION;
+        return DV_ERROR_KERNEL_SERVICE_LOAD_FAILED;
     }
     
     if (library_kext_loaded_and_valid(kBUNDLE_ID, kBUNDLE_DIR))
@@ -53,7 +53,7 @@ dv_error_t divert_open()
         _status = library_kext_unload_with_directory(kBUNDLE_DIR) ? DV_STATUS_LIMBO : DV_STATUS_IDLE;
         library_kext_unload_with_id(kBUNDLE_ID);
 
-        return DV_ERROR_FAILED_TO_LOAD_KERNEL_EXTENSION;
+        return DV_ERROR_KERNEL_SERVICE_LOAD_FAILED;
     }
 
     // TODO: open control socket connection
@@ -71,7 +71,7 @@ dv_error_t divert_close()
         _status = DV_STATUS_LIMBO;
         library_kext_unload_with_id(kBUNDLE_ID);
 
-        return DV_ERROR_FAILED_TO_UNLOAD_KERNEL_EXTENSION;
+        return DV_ERROR_KERNEL_SERVICE_UNLOAD_FAILED;;
     }
 
     _status = DV_STATUS_IDLE;
