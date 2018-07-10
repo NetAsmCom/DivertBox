@@ -2,6 +2,7 @@
 #include "library.h"
 
 dv_status_t _status = DV_STATUS_IDLE;
+int _socket = -1;
 
 dv_status_t divert_status()
 {
@@ -26,7 +27,7 @@ dv_error_t divert_open()
     ! MUST BE ENABLED ON RELEASE BUILDS
 
     char directory_md5sum[16];
-    if (library_md5sum_directory(kBUNDLE_DIR, directory_md5sum))
+    if (library_directory_md5sum(kBUNDLE_DIR, directory_md5sum))
     {
         return DV_ERROR_KERNEL_SERVICE_CHECKSUM_FAILED;
     }
@@ -38,7 +39,7 @@ dv_error_t divert_open()
 
     */
 
-    if (library_chown_directory(kBUNDLE_DIR, "root", "wheel"))
+    if (library_directory_chown(kBUNDLE_DIR, "root", "wheel"))
     {
         return DV_ERROR_KERNEL_SERVICE_LOAD_FAILED;
     }

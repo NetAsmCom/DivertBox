@@ -10,19 +10,41 @@
 #include <grp.h>
 #include <ftw.h>
 
+// -------- superuser access
+
+int library_superuser_access()
+{
+    return geteuid();
+}
+
+// -------- string to hexstring
+
+int library_string_to_hexstring(const char* string, int string_length, char* hexstring, int hexstring_length)
+{
+    if (string_length * 2 != hexstring_length)
+    {
+        return 1;
+    }
+
+    for (int index = 0; index < string_length; ++index)
+    {
+        if (snprintf(hexstring, hexstring_length, "%02X", string[index]) < 0)
+        {
+            return -1;
+        }
+
+        hexstring += 2;
+    }
+
+    return 0;
+}
+
 // -------- directory exists
 
 int library_directory_exists(const char* path)
 {
     struct stat s;
     return stat(path, &s) || !S_ISDIR(s.st_mode);
-}
-
-// -------- superuser access
-
-int library_superuser_access()
-{
-    return geteuid();
 }
 
 // -------- md5sum directory
@@ -62,35 +84,13 @@ int _library_md5sum_ftw_handle(const char* fpath, const struct stat* sb, int typ
     return 0;
 }
 
-int library_md5sum_directory(const char* path, unsigned char* checksum)
+int library_directory_md5sum(const char* path, unsigned char* checksum)
 {
     return
         CC_MD5_Init(&_library_md5_context) != 1 ||
         CC_MD5_Update(&_library_md5_context, kBUNDLE_ID, strlen(kBUNDLE_ID)) != 1 ||
         nftw(path, &_library_md5sum_ftw_handle, 4, FTW_PHYS | FTW_DEPTH) ||
         CC_MD5_Final(checksum, &_library_md5_context) != 1;
-}
-
-// -------- string to hexstring
-
-int library_string_to_hexstring(const char* string, int string_length, char* hexstring, int hexstring_length)
-{
-    if (string_length * 2 != hexstring_length)
-    {
-        return 1;
-    }
-
-    for (int index = 0; index < string_length; ++index)
-    {
-        if (snprintf(hexstring, hexstring_length, "%02X", string[index]) < 0)
-        {
-            return -1;
-        }
-
-        hexstring += 2;
-    }
-
-    return 0;
 }
 
 // -------- chown directory
@@ -108,7 +108,7 @@ int _library_chown_ftw_handle(const char* fpath, const struct stat* sb, int type
     return 0;
 }
 
-int library_chown_directory(const char* path, const char* user, const char* group)
+int library_directory_chown(const char* path, const char* user, const char* group)
 {
     _library_chown_user_id = 0;
     {
