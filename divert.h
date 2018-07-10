@@ -66,11 +66,12 @@ typedef enum
 {
     DV_ERROR_NONE                               = 0,
     DV_ERROR_UNKNOWN                            = 1,
-    DV_ERROR_SUPERUSER_REQUIRED                 = 2,
-    DV_ERROR_KERNEL_SERVICE_CHECKSUM_FAILED     = 3,
-    DV_ERROR_KERNEL_SERVICE_LOAD_FAILED         = 4,
-    DV_ERROR_KERNEL_SERVICE_CONNECT_FAILED      = 5,
-    DV_ERROR_KERNEL_SERVICE_UNLOAD_FAILED       = 6,
+    DV_ERROR_INVALID_STATE,
+    DV_ERROR_SUPERUSER_REQUIRED,
+    DV_ERROR_KERNEL_SERVICE_CHECKSUM_FAILED,
+    DV_ERROR_KERNEL_SERVICE_LOAD_FAILED,
+    DV_ERROR_KERNEL_SERVICE_CONNECT_FAILED,
+    DV_ERROR_KERNEL_SERVICE_UNLOAD_FAILED,
 } dv_error_t;
 
 typedef enum
@@ -82,13 +83,13 @@ typedef enum
 
 typedef enum
 {
-    DV_STATUS_IDLE      = 0x0,
-    DV_STATUS_LIMBO     = 0x6,
-    DV_STATUS_READY     = 0xA,
-    DV_STATUS_ACTIVE    = 0xF
-} dv_status_t;
+    DV_STATE_IDLE      = 0x0,
+    DV_STATE_LIMBO     = 0x6,
+    DV_STATE_READY     = 0xA,
+    DV_STATE_ACTIVE    = 0xF
+} dv_state_t;
 
-dv_status_t divert_status(void);
+dv_state_t divert_state(void);
 dv_error_t divert_open(void);
 dv_error_t divert_close(void);
 
