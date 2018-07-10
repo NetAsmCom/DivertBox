@@ -1,15 +1,20 @@
 #include <divert.h>
 #include "library.h"
 
-dv_status_t _status = DV_STATUS_IDLE;
+dv_state_t _state = DV_STATE_IDLE;
 
-dv_status_t divert_status()
+dv_state_t divert_state()
 {
-    return _status;
+    return _state;
 }
 
 dv_error_t divert_open()
 {
+    if (_state != DV_STATE_IDLE)
+    {
+        return DV_ERROR_INVALID_STATE;
+    }
+
     if (library_superuser_access())
     {
         return DV_ERROR_SUPERUSER_REQUIRED;
@@ -50,7 +55,7 @@ dv_error_t divert_open()
     
     if (library_kext_loaded_and_valid(kBUNDLE_ID, kBUNDLE_DIR))
     {
-        _status = library_kext_unload_with_directory(kBUNDLE_DIR) ? DV_STATUS_LIMBO : DV_STATUS_IDLE;
+        _state = library_kext_unload_with_directory(kBUNDLE_DIR) ? DV_STATE_LIMBO : DV_STATE_IDLE;
         library_kext_unload_with_id(kBUNDLE_ID);
 
         return DV_ERROR_KERNEL_SERVICE_LOAD_FAILED;
@@ -58,10 +63,11 @@ dv_error_t divert_open()
 
     if (library_control_socket_connect(kBUNDLE_ID))
     {
+        divert_close();
         return DV_ERROR_KERNEL_SERVICE_CONNECT_FAILED;
     }
 
-    _status = DV_STATUS_READY;
+    _state = DV_STATE_READY;
     return DV_ERROR_NONE;
 }
 
@@ -74,12 +80,12 @@ dv_error_t divert_close()
 
     if (library_kext_unload_with_directory(kBUNDLE_DIR))
     {
-        _status = DV_STATUS_LIMBO;
+        _state = DV_STATE_LIMBO;
         library_kext_unload_with_id(kBUNDLE_ID);
 
         return DV_ERROR_KERNEL_SERVICE_UNLOAD_FAILED;;
     }
 
-    _status = DV_STATUS_IDLE;
+    _state = DV_STATE_IDLE;
     return DV_ERROR_NONE;
 }

@@ -304,8 +304,10 @@ int library_control_socket_connect(const char* bundle_id)
 
 int library_control_socket_disconnect()
 {
+    if (_library_socket < 0) { return 0; }
+
     int result = close(_library_socket);
     if (result == 0) { _library_socket = -1; }
-    
+
     return result;
 }
