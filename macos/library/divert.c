@@ -2,7 +2,6 @@
 #include "library.h"
 
 dv_status_t _status = DV_STATUS_IDLE;
-int _socket = -1;
 
 dv_status_t divert_status()
 {

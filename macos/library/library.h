@@ -12,9 +12,11 @@ int library_directory_exists(const char* path);
 int library_directory_md5sum(const char* path, unsigned char* checksum);
 int library_directory_chown(const char* path, const char* user, const char* group);
 
-int library_kext_load_with_directory(const char* path);
-int library_kext_loaded_and_valid(const char* id, const char* path);
-int library_kext_unload_with_id(const char* id);
-int library_kext_unload_with_directory(const char* path);
+int library_kext_load_with_directory(const char* bundle_dir);
+int library_kext_loaded_and_valid(const char* bundle_id, const char* bundle_dir);
+int library_kext_unload_with_id(const char* bundle_id);
+int library_kext_unload_with_directory(const char* bundle_dir);
+
+int library_control_socket_create(void);
 
 #endif // LIBRARY_H

@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <sys/socket.h>
+#include <sys/sys_domain.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
@@ -47,7 +49,7 @@ int library_directory_exists(const char* path)
     return stat(path, &s) || !S_ISDIR(s.st_mode);
 }
 
-// -------- md5sum directory
+// -------- directory md5sum
 
 CC_MD5_CTX _library_md5_context;
 
@@ -93,7 +95,7 @@ int library_directory_md5sum(const char* path, unsigned char* checksum)
         CC_MD5_Final(checksum, &_library_md5_context) != 1;
 }
 
-// -------- chown directory
+// -------- directory chown
 
 uid_t _library_chown_user_id = 0;
 gid_t _library_chown_group_id = 0;
@@ -129,9 +131,9 @@ int library_directory_chown(const char* path, const char* user, const char* grou
 
 // -------- kext load with directory
 
-int library_kext_load_with_directory(const char* path)
+int library_kext_load_with_directory(const char* bundle_dir)
 {
-    CFStringRef path_string = CFStringCreateWithCString(kCFAllocatorDefault, path, kCFStringEncodingUTF8);
+    CFStringRef path_string = CFStringCreateWithCString(kCFAllocatorDefault, bundle_dir, kCFStringEncodingUTF8);
     if (path_string == NULL) { return -1; }
 
     CFURLRef path_url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path_string, kCFURLPOSIXPathStyle, true);
@@ -175,7 +177,7 @@ void _library_kext_check_enumerate(const void* key, const void* value, void* con
     }
 }
 
-int library_kext_loaded_and_valid(const char* id, const char* path)
+int library_kext_loaded_and_valid(const char* bundle_id, const char* bundle_dir)
 {
     CFDictionaryRef loaded_kexts = KextManagerCopyLoadedKextInfo(NULL, NULL);
     if (loaded_kexts == NULL) { return -1; }
@@ -184,12 +186,12 @@ int library_kext_loaded_and_valid(const char* id, const char* path)
 
     context.result = -1;
 
-    context.id = id;
-    context.id_length = strlen(id);
+    context.id = bundle_id;
+    context.id_length = strlen(bundle_id);
 
     char actualpath[PATH_MAX];
     bzero(actualpath, PATH_MAX);
-    if (realpath(path, actualpath) == NULL) { return -1; }
+    if (realpath(bundle_dir, actualpath) == NULL) { return -1; }
     context.path = actualpath;
     context.path_length = strlen(actualpath);
 
@@ -200,9 +202,9 @@ int library_kext_loaded_and_valid(const char* id, const char* path)
 
 // -------- kext unload with id
 
-int library_kext_unload_with_id(const char* id)
+int library_kext_unload_with_id(const char* bundle_id)
 {
-    CFStringRef bundle_id_string = CFStringCreateWithCString(kCFAllocatorDefault, id, kCFStringEncodingUTF8);
+    CFStringRef bundle_id_string = CFStringCreateWithCString(kCFAllocatorDefault, bundle_id, kCFStringEncodingUTF8);
     if (bundle_id_string == NULL) { return -1; }
 
     return KextManagerUnloadKextWithIdentifier(bundle_id_string) != kOSReturnSuccess;
@@ -236,7 +238,7 @@ void _library_kext_unload_enumerate(const void* key, const void* value, void* co
     }
 }
 
-int library_kext_unload_with_directory(const char* path)
+int library_kext_unload_with_directory(const char* bundle_dir)
 {
     CFDictionaryRef loaded_kexts = KextManagerCopyLoadedKextInfo(NULL, NULL);
     if (loaded_kexts == NULL) { return -1; }
@@ -247,11 +249,23 @@ int library_kext_unload_with_directory(const char* path)
 
     char actualpath[PATH_MAX];
     bzero(actualpath, PATH_MAX);
-    if (realpath(path, actualpath) == NULL) { return -1; }
+    if (realpath(bundle_dir, actualpath) == NULL) { return -1; }
     context.path = actualpath;
     context.path_length = strlen(actualpath);
 
     CFDictionaryApplyFunction(loaded_kexts, _library_kext_unload_enumerate, &context);
 
     return context.result;
+}
+
+// -------- control socket create
+
+int _library_socket = -1;
+
+int library_control_socket_create()
+{
+    if (_library_socket > -1) { return -1; }
+
+    _library_socket = socket(PF_SYSTEM, SOCK_DGRAM, SYSPROTO_CONTROL);
+    return _library_socket < 0;
 }
