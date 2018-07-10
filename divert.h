@@ -93,7 +93,7 @@ dv_state_t divert_state(void);
 dv_error_t divert_open(void);
 dv_error_t divert_close(void);
 
-dv_error_t divert_filter_add(const uint8_t* buffer, size_t buffer_length);
+dv_error_t divert_filter_add(size_t* index, const uint8_t* buffer, size_t buffer_length);
 dv_error_t divert_filter_get(size_t index, uint8_t* buffer, size_t buffer_length, size_t* output_length);
 dv_error_t divert_filter_remove(size_t index);
 dv_error_t divert_filter_count(size_t* count);
