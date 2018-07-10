@@ -17,6 +17,7 @@ int library_kext_loaded_and_valid(const char* bundle_id, const char* bundle_dir)
 int library_kext_unload_with_id(const char* bundle_id);
 int library_kext_unload_with_directory(const char* bundle_dir);
 
-int library_control_socket_create(void);
+int library_control_socket_connect(const char* bundle_id);
+int library_control_socket_disconnect(void);
 
 #endif // LIBRARY_H

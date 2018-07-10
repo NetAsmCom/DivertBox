@@ -7,6 +7,8 @@
 #include <sys/stat.h>
 #include <sys/socket.h>
 #include <sys/sys_domain.h>
+#include <sys/kern_control.h>
+#include <sys/ioctl.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
@@ -258,14 +260,52 @@ int library_kext_unload_with_directory(const char* bundle_dir)
     return context.result;
 }
 
-// -------- control socket create
+// -------- control socket connect
 
 int _library_socket = -1;
 
-int library_control_socket_create()
+int library_control_socket_connect(const char* bundle_id)
 {
     if (_library_socket > -1) { return -1; }
 
     _library_socket = socket(PF_SYSTEM, SOCK_DGRAM, SYSPROTO_CONTROL);
-    return _library_socket < 0;
+    if (_library_socket < 0) { return -1; }
+
+    struct ctl_info info;
+    bzero(&info, sizeof(info));
+    strncpy(info.ctl_name, bundle_id, strlen(bundle_id));
+    if (ioctl(_library_socket, CTLIOCGINFO, &info))
+    {
+        close(_library_socket);
+        _library_socket = -1;
+
+        return 1;
+    }
+
+    struct sockaddr_ctl addr;
+    bzero(&addr, sizeof(addr));
+    addr.sc_id = info.ctl_id;
+    addr.sc_unit = 0;
+    addr.sc_len = sizeof(addr);
+    addr.sc_family = AF_SYSTEM;
+    addr.ss_sysaddr = AF_SYS_CONTROL;
+    if (connect(_library_socket, (struct sockaddr*)&addr, sizeof(addr)))
+    {
+        close(_library_socket);
+        _library_socket = -1;
+
+        return 2;
+    }
+
+    return 0;
+}
+
+// -------- control socket disconnect
+
+int library_control_socket_disconnect()
+{
+    int result = close(_library_socket);
+    if (result == 0) { _library_socket = -1; }
+    
+    return result;
 }

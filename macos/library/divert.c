@@ -56,7 +56,10 @@ dv_error_t divert_open()
         return DV_ERROR_KERNEL_SERVICE_LOAD_FAILED;
     }
 
-    // TODO: open control socket connection
+    if (library_control_socket_connect(kBUNDLE_ID))
+    {
+        return DV_ERROR_KERNEL_SERVICE_CONNECT_FAILED;
+    }
 
     _status = DV_STATUS_READY;
     return DV_ERROR_NONE;
@@ -64,7 +67,10 @@ dv_error_t divert_open()
 
 dv_error_t divert_close()
 {
-    // TODO: disconnect control socket connection
+    if (library_control_socket_disconnect())
+    {
+        return DV_ERROR_KERNEL_SERVICE_UNLOAD_FAILED;
+    }
 
     if (library_kext_unload_with_directory(kBUNDLE_DIR))
     {
