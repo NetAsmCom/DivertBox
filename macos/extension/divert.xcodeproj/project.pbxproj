@@ -253,6 +253,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = ..;
 				INFOPLIST_FILE = info.plist;
 				MODULE_NAME = com.mfatihmar.divert;
 				MODULE_START = divert_start;
@@ -268,6 +269,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = ..;
 				INFOPLIST_FILE = info.plist;
 				MODULE_NAME = com.mfatihmar.divert;
 				MODULE_START = divert_start;

@@ -3,6 +3,8 @@
 
 #define kBUNDLE_ID "com.mfatihmar.divert"
 
+#include <internal.h>
+
 #include <mach/mach_types.h>
 #include <sys/systm.h>
 #include <stdint.h>

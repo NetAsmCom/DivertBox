@@ -1,4 +1,5 @@
 #include <divert.h>
+#include <internal.h>
 #include "library.h"
 
 dv_state_t _state = DV_STATE_IDLE;
