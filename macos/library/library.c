@@ -325,3 +325,22 @@ int library_control_socket_option_get(int option, void* value, unsigned int* len
 {
     return getsockopt(_library_socket, SYSPROTO_CONTROL, option, value, length);
 }
+
+// -------- control socket receive
+
+int library_control_socket_receive(void* buffer, unsigned int buffer_length, unsigned int* receive_length)
+{
+    int result = recv(_library_socket, buffer, buffer_length, MSG_WAITALL);
+    if (result < 0) { return result; }
+
+    *receive_length = result;
+    return 0;
+}
+
+// -------- control socket send
+
+int library_control_socket_send(const void* buffer, unsigned int buffer_length)
+{
+    int result = send(_library_socket, buffer, buffer_length, MSG_WAITALL);
+    return result < 0 ? result : 0;
+}

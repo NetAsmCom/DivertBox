@@ -21,5 +21,7 @@ int library_control_socket_connect(const char* bundle_id);
 int library_control_socket_disconnect(void);
 int library_control_socket_option_set(int option, const void* value, unsigned int length);
 int library_control_socket_option_get(int option, void* value, unsigned int* length);
+int library_control_socket_receive(void* buffer, unsigned int buffer_length, unsigned int* receive_length);
+int library_control_socket_send(const void* buffer, unsigned int buffer_length);
 
 #endif // LIBRARY_H
