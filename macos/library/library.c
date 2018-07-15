@@ -311,3 +311,17 @@ int library_control_socket_disconnect()
 
     return result;
 }
+
+// -------- control socket option set
+
+int library_control_socket_option_set(int option, const void* value, unsigned int length)
+{
+    return setsockopt(_library_socket, SYSPROTO_CONTROL, option, value, length);
+}
+
+// -------- control socket option get
+
+int library_control_socket_option_get(int option, void* value, unsigned int* length)
+{
+    return getsockopt(_library_socket, SYSPROTO_CONTROL, option, value, length);
+}

@@ -19,5 +19,7 @@ int library_kext_unload_with_directory(const char* bundle_dir);
 
 int library_control_socket_connect(const char* bundle_id);
 int library_control_socket_disconnect(void);
+int library_control_socket_option_set(int option, const void* value, unsigned int length);
+int library_control_socket_option_get(int option, void* value, unsigned int* length);
 
 #endif // LIBRARY_H
